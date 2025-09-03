@@ -1,24 +1,29 @@
 {
   "name": "playwright-ghpages-screenshots",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "packageManager": "pnpm@9.0.0",
+  "bin": {
+    "pgs": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "engines": { "node": ">=18" },
   "scripts": {
-    "prepare": "playwright install --with-deps",
-    "screenshot": "playwright test --project=chromium",
-    "screenshot:all": "playwright test",
-    "test": "playwright test --reporter=list",
-    "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
-    "pages:build": "tsx scripts/generate-index.ts",
-    "pages:publish": "echo 'Publishing handled by GitHub Actions'"
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts --help"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.46.0",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.47.1",
-    "@types/node": "^20.14.10",
-    "prettier": "^3.3.3",
-    "tsx": "^4.15.7",
+    "tsx": "^4.19.2",
     "typescript": "^5.5.4"
   }
 }

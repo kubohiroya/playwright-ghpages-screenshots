@@ -1,6 +1,6 @@
 # TASKS
 
-本リポジトリは、Playwright で取得したスクリーンショットを GitHub Pages で公開する最小構成の雛形です。タスク管理は本ファイルを単一の情報源（SSoT）として運用します。
+本リポジトリは、Playwright のスクリーンショットを gh-pages ブランチ配下にのみコミット/プッシュする CLI パッケージです。開発ブランチのワークツリーは変更しません。タスク管理は本ファイルを単一の情報源（SSoT）として運用します。
 
 ## Git ブランチ戦略
 - 命名: `<type>/<scope>/<slug>`（例: `feat/ci/ghpages-playwright-scaffold`）
@@ -13,29 +13,27 @@
 - なし
 
 ### ToDo（優先度順）
-- ブラウザ/デバイス拡張
-  - ブランチ名: `feat/test/mobile-projects`
-  - 依存: scaffold 完了
-  - 受け入れ基準: Pixel 等のモバイルプロジェクトでのスクリーンショットを追加保存できる
+- ワークツリー deploy の安定化
+  - ブランチ名: `fix/cli/worktree-robust`
+  - 依存: CLI 基本機能
+  - 受け入れ基準: 既存 `.worktrees/<branch>` がある場合も成功、衝突時に自動クリーン
   - チェックリスト:
-    - Playwright projects にモバイルを追加
-    - `config/feature-flags.ts` の `includeMobile` を既定OFFのまま維持
-    - CI 成功し、Pages で確認
-- URL 定義の外部化（環境変数/ファイル分割）
-  - ブランチ名: `feat/app/urls-config`
-  - 依存: scaffold 完了
-  - 受け入れ基準: `src/urls.json` 以外の供給元（例: `URLS` env）に対応
+    - `git worktree list` の検査
+    - 競合時の `git worktree prune` を追加
+- 併走撮影（concurrency）
+  - ブランチ名: `feat/cli/concurrency`
+  - 依存: CLI 基本機能
+  - 受け入れ基準: 並列数指定でスループット向上（デフォルト逐次）
   - チェックリスト:
-    - 仕様と優先度（env > ファイル）を決定
-    - テストケース追加
-    - README 反映
-- レポート/一覧の拡張
-  - ブランチ名: `feat/ui/index-enhance`
-  - 依存: scaffold 完了
-  - 受け入れ基準: `docs/index.html` にメタデータ（取得日時/デバイス）を表示
+    - p-limit 等の導入検討（既定OFF）
+    - 実測で安定
+- 設定スキーマ/検証
+  - ブランチ名: `feat/cli/config-validate`
+  - 依存: CLI 基本機能
+  - 受け入れ基準: 必須フィールド欠落時に明確なエラー
   - チェックリスト:
-    - `scripts/generate-index.mjs` 改修
-    - スタイル微調整
+    - バリデータ（zod など）導入
+    - README にエラー例
 
 ### Done
 - 初期雛形の導入（本コミット）
@@ -43,21 +41,17 @@
   - 影響: なし（新規追加のみ）
 
 ## フラグ運用
-- 読み取り場所: `config/feature-flags.ts`
-- 既定: 影響の大きい機能は既定OFF
-  - `includeMobile`: モバイル端末のスクリーンショット取得（既定OFF）
-  - `useGhPagesWorkflow`: Pages への自動公開（既定ON）
+- 現時点なし（設定は `pgs.config.json` で制御）
 
 ## ロールバック指針
-- Pages 停止: リポジトリ設定で Pages をOFF、または `useGhPagesWorkflow=false` にしてワークフローを停止
-- スクリーンショット停止: `includeMobile=false` に加えて `tests/` 実行をCIから除外
+- `gh-pages` に誤コミット時は `git revert`（履歴保持）
+- CI からのデプロイ停止はワークフローを無効化、または `deploy.push=false`
 
 ## 今日の着手（運用ログ）
 - start: 初期雛形の追加
 - done: Playwright 設定、`docs/` 自動生成、Pages ワークフロー雛形
 
 ## 受け入れ基準（DoD）
-- `pnpm install && pnpm prepare && pnpm screenshot` がローカルで成功
-- `docs/` に `.png` が出力され、`pnpm pages:build` 後に `docs/index.html` で一覧表示
-- GitHub Actions が main への push で成功し、Pages で公開（設定済みの場合）
-
+- `npm run build` が成功し、`dist/` が生成される
+- `npx tsx src/index.ts run -c pgs.config.json` でローカル撮影・保存成功
+- `deploy` 設定時に gh-pages ブランチへコミットが作成される（push 可/不可を切替可能）
