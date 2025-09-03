@@ -1,0 +1,29 @@
+{
+  "name": "playwright-ghpages-screenshots",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "pgs": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts --help"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.46.0",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.5.4"
+  }
+}

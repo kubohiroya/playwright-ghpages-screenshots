@@ -1,0 +1,29 @@
+{
+  "preview": {
+    "command": "vite preview --port 4173 --strictPort",
+    "urlCheck": "http://localhost:4173",
+    "startupTimeoutSec": 30
+  },
+  "targets": [
+    { "url": "https://example.com/", "name": "home" },
+    { "url": "https://example.com/docs" }
+  ],
+  "screenshot": {
+    "outDir": "dist-screenshots",
+    "dateSubdir": true,
+    "fullPage": true,
+    "device": "desktop",
+    "scale": 1,
+    "width": 1280,
+    "height": 800,
+    "waitUntil": "networkidle",
+    "extraWaitMs": 300
+  },
+  "deploy": {
+    "targetBranch": "gh-pages",
+    "targetDir": "assets/manual-screenshots",
+    "commitMessage": "docs(screenshots): update",
+    "push": false
+  }
+}
+
