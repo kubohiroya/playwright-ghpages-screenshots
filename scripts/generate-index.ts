@@ -1,26 +1,28 @@
 import { readdir, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
+type FileEntry = { name: string; fullPath: string; time: number };
+
 const DOCS_DIR = 'docs';
 
-function byTimeDesc(a, b) {
+function byTimeDesc(a: FileEntry, b: FileEntry): number {
   return b.time - a.time;
 }
 
-async function listPngs(dir) {
-  const names = await readdir(dir).catch(() => []);
-  const files = [];
+async function listPngs(dir: string): Promise<FileEntry[]> {
+  const names = await readdir(dir).catch(() => [] as string[]);
+  const files: FileEntry[] = [];
   for (const name of names) {
     if (!name.toLowerCase().endsWith('.png')) continue;
     const full = path.join(dir, name);
     const s = await stat(full).catch(() => null);
     if (!s) continue;
-    files.push({ name, path: full, time: s.mtimeMs });
+    files.push({ name, fullPath: full, time: s.mtimeMs });
   }
   return files.sort(byTimeDesc);
 }
 
-function html(files) {
+function html(files: FileEntry[]): string {
   const items = files
     .map(
       (f) => `

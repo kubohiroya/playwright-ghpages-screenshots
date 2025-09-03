@@ -11,14 +11,14 @@
     "test": "playwright test --reporter=list",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "pages:build": "node scripts/generate-index.mjs",
+    "pages:build": "tsx scripts/generate-index.ts",
     "pages:publish": "echo 'Publishing handled by GitHub Actions'"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.1",
     "@types/node": "^20.14.10",
     "prettier": "^3.3.3",
+    "tsx": "^4.15.7",
     "typescript": "^5.5.4"
   }
 }
-
