@@ -1,0 +1,24 @@
+{
+  "name": "playwright-ghpages-screenshots",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "prepare": "playwright install --with-deps",
+    "screenshot": "playwright test --project=chromium",
+    "screenshot:all": "playwright test",
+    "test": "playwright test --reporter=list",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "pages:build": "node scripts/generate-index.mjs",
+    "pages:publish": "echo 'Publishing handled by GitHub Actions'"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.1",
+    "@types/node": "^20.14.10",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  }
+}
+
